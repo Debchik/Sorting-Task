@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <math.h>
 
 #define TAIL 10000
 #define EPS 0.0000000001
@@ -9,6 +10,7 @@
 #define DECREASING 0
 #define HEAD 0
 #define PREHEAD -1
+#define MAXEXP 10
 
 void swap(double* a, double* b)
 {
@@ -17,18 +19,30 @@ void swap(double* a, double* b)
     *b = buf;
 }
 
+void print_arr(double* a, int n)
+{
+    for (int i = 0; i < n; ++i)
+    {
+        printf("%lf\n", a[i]);
+    }
+    printf("----------\n");
+}
+
 double generate_random_double(void)
 {
-    int integer_part = rand();
-    int fractional_part = rand();
     double random_number;
+
+    double frac = ((double) rand() / RAND_MAX);
+    int exp = rand() % MAXEXP;
+    random_number = frac * ((double)pow(2, exp));
+
 
     // generating random sign of the number
     int random_sign_first = rand();
     int random_sign_second = rand();
     int sign = (random_sign_first > random_sign_second) ? 1 : -1;
 
-    random_number = integer_part + ((double)(fractional_part) / (double)TAIL);
+
     random_number *= sign;
 
     return random_number;
@@ -210,15 +224,20 @@ int main(void)
 
     printf("Put length of array: ");
     scanf("%d", &n);
-    printf("Put generator parameter: ");
+    printf("Put generator parameter(1-3): ");
     scanf("%d",  &generator_parameter);
 
-    double* a = generate_array(3, n);
+    double* a = generate_array(generator_parameter, n);
+    printf("Generated array:\n");
+    print_arr(a, n);
+
     double* a_copy = calloc(n, sizeof(double));
     memcpy(a_copy, a, n * sizeof(double));
 
     pyramid_sort(a, n);
+    print_arr(a, n);
     shell_sorting(a_copy, n);
+    print_arr(a_copy, n);
 
     free(a);
     free(a_copy);
