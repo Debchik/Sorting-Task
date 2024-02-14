@@ -27,6 +27,22 @@ void print_arr(double* a, int n)
     printf("----------\n");
 }
 
+
+// returns 1 if array is sorted correctly
+// and 0 if it is sorted incorrectly
+int check_sorted_array(double* a, int n)
+{
+    for (int i = 1; i < n; ++i)
+    {
+        if (fabs(a[i - 1]) < fabs(a[i]))
+        {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 double generate_random_double(void)
 {
     double random_number;
@@ -64,7 +80,7 @@ void generate_linear_array(double* a, int n, int parameter)
     double random_start = generate_random_double();
     double random_delta = generate_random_double();
 
-    while (abs(random_delta) < EPS || random_delta < 0)
+    while (fabs(random_delta) < EPS || random_delta < 0)
         random_delta = generate_random_double();
 
     if (parameter == DECREASING)
@@ -114,7 +130,7 @@ void shell_sorting(double* a, int n)
             for (int j = i + step; j < n; ++j)
             {
                 ind = j;
-                while ((ind - step) >= 0 && ++comp_cnt && (abs(a[ind]) > abs(a[ind - step])))
+                while ((ind - step) >= 0 && ++comp_cnt && (fabs(a[ind]) > fabs(a[ind - step])))
                 {
                     swap(&a[ind], &a[ind - step]);
                     swap_cnt++;
@@ -130,7 +146,7 @@ void shell_sorting(double* a, int n)
 
 void sift_element_up(double* a, int ind)
 {
-    while (ind > 0 && (abs(a[ind]) < abs(a[ind / 2])))
+    while (ind > 0 && (fabs(a[ind]) < fabs(a[ind / 2])))
     {
         swap(&a[ind], &a[ind / 2]);
         ind /= 2;
@@ -175,12 +191,12 @@ void sift_head_down(double* a, int n, int* swap_cnt, int* comp_cnt)
         right_ind = right_child_ind(head);
         left_ind = left_child_ind(head);
 
-        if (left_ind < n && ++(*comp_cnt) && (abs(a[next]) > abs(a[left_ind])))
+        if (left_ind < n && ++(*comp_cnt) && (fabs(a[next]) > fabs(a[left_ind])))
         {
             next = left_ind;
         }
 
-        if (right_ind < n && ++(*comp_cnt) && (abs(a[next]) > abs(a[right_ind])))
+        if (right_ind < n && ++(*comp_cnt) && (fabs(a[next]) > fabs(a[right_ind])))
         {
             next = right_ind;
         }
@@ -237,6 +253,20 @@ int main(void)
     print_arr(a, n);
     shell_sorting(a_copy, n);
     print_arr(a_copy, n);
+
+    int shell_sorted_correctly = check_sorted_array(a, n);
+    int pyramid_sorted_correctly = check_sorted_array(a, n);
+
+    if (shell_sorted_correctly)
+        printf("Shell sort completed correctly\n");
+    else
+        printf("Shell sort completed incorrectly\n");
+
+    if (pyramid_sorted_correctly)
+        printf("Pyramid sort completed correctly\n");
+    else
+        printf("Pyramid sort completed incorrectly\n");
+
 
     free(a);
     free(a_copy);
