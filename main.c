@@ -144,20 +144,21 @@ void shell_sorting(double* a, int n)
 }
 
 
-void sift_element_up(double* a, int ind)
+void sift_element_up(double* a, int ind, int* swaps, int* compares)
 {
-    while (ind > 0 && (fabs(a[ind]) < fabs(a[ind / 2])))
+    while (ind > 0 && ++(*compares) && (fabs(a[ind]) < fabs(a[(ind - 1) / 2])))
     {
-        swap(&a[ind], &a[ind / 2]);
-        ind /= 2;
+        swap(&a[ind], &a[(ind - 1)/ 2]);
+        ++(*swaps);
+        ind = (ind - 1) / 2;
     }
 }
 
-void build_heap(double* a, int n)
+void build_heap(double* a, int n, int* swaps, int* compares)
 {
     for (int i = 1; i < n; ++i)
     {
-        sift_element_up(a, i);
+        sift_element_up(a, i, swaps, compares);
     }
 }
 
@@ -214,7 +215,7 @@ void pyramid_sort(double* a, int n)
     int swap_cnt = 0;
     int comp_cnt = 0;
 
-    build_heap(a, n);
+    build_heap(a, n, &swap_cnt, &comp_cnt);
 
     int sorted = 1;
     for (int i = 0; i < n; ++i)
@@ -244,17 +245,17 @@ int main(void)
 
     double* a = generate_array(generator_parameter, n);
     printf("Generated array:\n");
-    print_arr(a, n);
+    //print_arr(a, n);
 
     double* a_copy = calloc(n, sizeof(double));
     memcpy(a_copy, a, n * sizeof(double));
 
     pyramid_sort(a, n);
-    print_arr(a, n);
+    //print_arr(a, n);
     shell_sorting(a_copy, n);
-    print_arr(a_copy, n);
+    //print_arr(a_copy, n);
 
-    int shell_sorted_correctly = check_sorted_array(a, n);
+    int shell_sorted_correctly = check_sorted_array(a_copy, n);
     int pyramid_sorted_correctly = check_sorted_array(a, n);
 
     if (shell_sorted_correctly)
