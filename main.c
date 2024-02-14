@@ -4,13 +4,12 @@
 #include <string.h>
 #include <math.h>
 
-#define TAIL 10000
 #define EPS 0.0000000001
 #define INCREASING 1
 #define DECREASING 0
 #define HEAD 0
 #define PREHEAD -1
-#define MAXEXP 10
+#define MAXEXP 32
 
 void swap(double* a, double* b)
 {
