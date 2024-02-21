@@ -127,7 +127,7 @@ void shell_sorting(double* a, int n)
         int ind;
         for (int i = 0; i < step; i++)
         {
-            for (int j = i + step; j < n; ++j)
+            for (int j = i + step; j < n; j += step)
             {
                 ind = j;
                 while ((ind - step) >= 0 && ++comp_cnt && (fabs(a[ind]) > fabs(a[ind - step])))
@@ -218,7 +218,7 @@ void pyramid_sort(double* a, int n)
     build_heap(a, n, &swap_cnt, &comp_cnt);
 
     int sorted = 1;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < (n - 1); ++i)
     {
         swap(&a[HEAD], &a[n - sorted]);
         swap_cnt++;
@@ -243,17 +243,18 @@ int main(void)
     printf("Put generator parameter(1-3): ");
     scanf("%d",  &generator_parameter);
 
-    double* a = generate_array(generator_parameter, n);
+    //double* a = generate_array(generator_parameter, n);
+    double a[6] = {-3.0, 4.0, 1.0, -1.0, 8.0, 4.0};
     printf("Generated array:\n");
-    //print_arr(a, n);
+    print_arr(a, n);
 
     double* a_copy = calloc(n, sizeof(double));
     memcpy(a_copy, a, n * sizeof(double));
 
     pyramid_sort(a, n);
-    //print_arr(a, n);
+    print_arr(a, n);
     shell_sorting(a_copy, n);
-    //print_arr(a_copy, n);
+    print_arr(a_copy, n);
 
     int shell_sorted_correctly = check_sorted_array(a_copy, n);
     int pyramid_sorted_correctly = check_sorted_array(a, n);
@@ -268,8 +269,7 @@ int main(void)
     else
         printf("Pyramid sort completed incorrectly\n");
 
-
-    free(a);
+    //free(a);
     free(a_copy);
     return 0;
 }
