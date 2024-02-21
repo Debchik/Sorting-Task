@@ -243,8 +243,7 @@ int main(void)
     printf("Put generator parameter(1-3): ");
     scanf("%d",  &generator_parameter);
 
-    //double* a = generate_array(generator_parameter, n);
-    double a[6] = {-3.0, 4.0, 1.0, -1.0, 8.0, 4.0};
+    double* a = generate_array(generator_parameter, n);
     printf("Generated array:\n");
     print_arr(a, n);
 
@@ -269,7 +268,7 @@ int main(void)
     else
         printf("Pyramid sort completed incorrectly\n");
 
-    //free(a);
+    free(a);
     free(a_copy);
     return 0;
 }
